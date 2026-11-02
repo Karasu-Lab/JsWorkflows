@@ -10,16 +10,20 @@ fi
 
 pnpm install --dir "$tools" --frozen-lockfile --ignore-scripts
 
-if [ -f pnpm-lock.yaml ]; then
-    pnpm install --frozen-lockfile
-else
-    pnpm install
+if [ "$task" != "format" ]; then
+    if [ -f pnpm-lock.yaml ]; then
+        pnpm install --frozen-lockfile
+    else
+        pnpm install
+    fi
 fi
 
 case "$task" in
     format)
+        organize_imports="$(cd "$tools" && node -p 'require.resolve("prettier-plugin-organize-imports")')"
         "$tools/node_modules/.bin/prettier" \
             --config "$tools/.prettierrc.json" \
+            --plugin "$organize_imports" \
             --ignore-unknown \
             --write "**/*.{ts,tsx,mts,cts,js,jsx,mjs,cjs,json,css}"
 
