@@ -11,10 +11,11 @@ fi
 pnpm install --dir "$tools" --frozen-lockfile --ignore-scripts
 
 if [ "$task" != "format" ]; then
-    if [ -f pnpm-lock.yaml ]; then
-        pnpm install --frozen-lockfile
+    workspace="$(node "$tools/scripts/resolve-workspace.mjs")"
+    if [ "$workspace" = "unchanged" ] && [ -f pnpm-lock.yaml ]; then
+        pnpm install --frozen-lockfile --config.strict-dep-builds=false
     else
-        pnpm install
+        pnpm install --no-frozen-lockfile --config.strict-dep-builds=false
     fi
 fi
 
