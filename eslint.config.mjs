@@ -1,3 +1,4 @@
+import nextPlugin from "@next/eslint-plugin-next";
 import tseslint from "typescript-eslint";
 
 export default [
@@ -19,6 +20,7 @@ export default [
         },
         plugins: {
             "@typescript-eslint": tseslint.plugin,
+            "@next/next": nextPlugin,
         },
         rules: {
             "no-unused-vars": "off",
